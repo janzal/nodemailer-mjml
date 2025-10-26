@@ -1,8 +1,14 @@
-name: Publish 📦
+name: Publish to GitHub Packages 📦
 
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish'
+        required: true
+        type: string
 
 jobs:
   test:
@@ -10,38 +16,14 @@ jobs:
     steps:
       - name: "Tests:checkout"
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       
       - name: "Tests:run"
         run: docker compose run tests yarn test
   
-  publish-npm:
+  publish:
     needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Publish:checkout"
-        uses: actions/checkout@v2
-      
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '23.x'
-          registry-url: 'https://registry.npmjs.org'
-      - name: "Enable corepack"
-        run: corepack enable
-        
-      - name: "Publish:install"
-        run: yarn
-      
-      - name: "Publish:build"
-        run: yarn build
-
-      - name: "Publish:publish package on NPM 📦"
-        run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  publish-gpr:
-    needs: publish-npm
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,6 +31,8 @@ jobs:
     steps:
       - name: "Publish:checkout"
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       
       - name: Setup Node
         uses: actions/setup-node@v2
