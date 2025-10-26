@@ -1,5 +1,5 @@
 {
-  "name": "nodemailer-mjml",
+  "name": "@janzal/nodemailer-mjml",
   "version": "1.6.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
