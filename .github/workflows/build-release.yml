@@ -1,0 +1,57 @@
+name: Build and Release Package 📦
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git reference to build (tag, branch, or commit SHA)'
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+      
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23.x'
+      
+      - name: "Enable corepack"
+        run: corepack enable
+        
+      - name: "Install dependencies"
+        run: yarn install
+      
+      - name: "Build package"
+        run: yarn build
+
+      - name: "Create artifacts directory"
+        run: mkdir -p ./artifacts
+
+      - name: "Pack package"
+        run: yarn pack --out ./artifacts/%s-%v.tgz
+
+      - name: "Upload artifact to release"
+        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'release'
+        with:
+          files: ./artifacts/*.tgz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Upload artifact for workflow dispatch"
+        uses: actions/upload-artifact@v3
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: package-tarball
+          path: ./artifacts/*.tgz
