@@ -6,4 +6,5 @@ export type BuildLayoutTemplateOptions = {
     templateLayoutSlots: NonNullable<Options["templateLayoutSlots"]>;
     templatePartialsFolder?: IPluginOptions["templatePartialsFolder"];
     templateFolder: IPluginOptions["templateFolder"];
+    readFileContent: NonNullable<IPluginOptions["readFileContent"]>;
 }

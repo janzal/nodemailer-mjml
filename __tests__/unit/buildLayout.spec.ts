@@ -9,7 +9,10 @@ describe("Build layout", () => {
             templateFolder: join(__dirname, "folderThatDoesNotExist"),
             templateLayoutName: "layout/layout-single-slot",
             templateLayoutSlots: {},
-            templatePartialsFolder: "/shared"
+            templatePartialsFolder: "/shared",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         })).rejects.toThrow();
     });
 
@@ -18,7 +21,10 @@ describe("Build layout", () => {
             templateFolder: join(__dirname, "../resources"),
             templateLayoutName: "layout/layout-that-does-not-exist",
             templateLayoutSlots: {},
-            templatePartialsFolder: "/shared"
+            templatePartialsFolder: "/shared",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         })).rejects.toThrow();
     });
 
@@ -27,7 +33,10 @@ describe("Build layout", () => {
             templateFolder: join(__dirname, "../resources"),
             templateLayoutName: "layout/layout-without-slots",
             templateLayoutSlots: {},
-            templatePartialsFolder: "/shared"
+            templatePartialsFolder: "/shared",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         const originalLayoutContent = await readFile(join(__dirname, "../resources/layout/layout-without-slots.mjml"), "utf8");
@@ -43,7 +52,10 @@ describe("Build layout", () => {
             templateLayoutSlots: {
                 header: "/includes/header",
             },
-            templatePartialsFolder: "/shared"
+            templatePartialsFolder: "/shared",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         const originalLayoutContent = await readFile(join(__dirname, "../resources/layout/layout-without-slots.mjml"), "utf8");
@@ -59,7 +71,10 @@ describe("Build layout", () => {
             templateLayoutSlots: {
                 header: "/include/header",
             },
-            templatePartialsFolder: "/include"
+            templatePartialsFolder: "/include",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         expect(buildedLayout).toBeDefined();
@@ -71,7 +86,10 @@ describe("Build layout", () => {
             templateFolder: join(__dirname, "../resources"),
             templateLayoutName: "layout/layout-single-slot",
             templateLayoutSlots: {},
-            templatePartialsFolder: "/include"
+            templatePartialsFolder: "/include",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         }, {templateData: "templateData"});
 
         
@@ -85,6 +103,9 @@ describe("Build layout", () => {
             templateFolder: join(__dirname, "../resources"),
             templateLayoutName: "layout/layout-single-slot",
             templateLayoutSlots: {},
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         expect(buildedLayout).toBeDefined();
@@ -97,7 +118,10 @@ describe("Build layout", () => {
             templateLayoutName: "layout/layout-multiple-slots",
             templateLayoutSlots: {
             },
-            templatePartialsFolder: "/include"
+            templatePartialsFolder: "/include",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         expect(buildedLayout).toBeDefined();
@@ -119,7 +143,10 @@ describe("Build layout", () => {
                 customContent: "/include/content",
                 customFooter: "/include/customFooter"
             },
-            templatePartialsFolder: "/include"
+            templatePartialsFolder: "/include",
+            readFileContent(filePath) {
+                return readFile(filePath, "utf8");
+            },
         });
 
         expect(buildedLayout).toBeDefined();

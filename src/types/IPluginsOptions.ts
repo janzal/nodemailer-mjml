@@ -11,6 +11,5 @@ export interface IPluginOptions {
         preset?: HtmlnanoPreset
 
     };
-
-    
+    readFileContent?: (filePath: string) => Promise<string>;
 }
