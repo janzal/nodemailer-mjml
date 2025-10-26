@@ -5,8 +5,8 @@ on:
     types: [created]
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Release tag to publish'
+      ref:
+        description: 'Git reference to publish (tag, branch, or commit SHA)'
         required: true
         type: string
 
@@ -17,7 +17,7 @@ jobs:
       - name: "Tests:checkout"
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ github.event.inputs.ref || github.ref }}
       
       - name: "Tests:run"
         run: docker compose run tests yarn test
@@ -29,7 +29,7 @@ jobs:
       - name: "Publish:checkout"
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ github.event.inputs.ref || github.ref }}
       
       - name: Setup Node
         uses: actions/setup-node@v2
