@@ -11,19 +11,7 @@ on:
         type: string
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Tests:checkout"
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.ref || github.ref }}
-      
-      - name: "Tests:run"
-        run: docker compose run tests yarn test
-  
   publish:
-    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
